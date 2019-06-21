@@ -164,7 +164,14 @@ export class Dealer {
                playerAlternate += 11;
              }
            }
-           return [playerTotal, playerAlternate];
+             if (
+               playerAlternate > playerTotal &&
+               playerAlternate < 22
+             ) {
+               return playerAlternate;
+             } else {
+               return playerTotal;
+             }
          }
 
          showDealerTotals() {
@@ -180,7 +187,13 @@ export class Dealer {
                dealerAlternate += 11;
              }
            }
-           return [dealerTotal, dealerAlternate];
+           if(dealerAlternate > dealerTotal && dealerAlternate < 22){
+             return dealerAlternate
+           }
+           else{
+            return dealerTotal
+           }
+           
          }
 
          dealCard(who) {
@@ -193,7 +206,9 @@ export class Dealer {
                let myCard = cardValues[randomCard.toString()];
                this.dealerCards.push(myCard);
                this.deltCards[randomCard.toString()] = 1;
-               console.log(myCard);
+
+              
+               return myCard;
              }
            }
 
@@ -206,7 +221,8 @@ export class Dealer {
 
                this.playerCards.push(myCard);
                this.deltCards[randomCard.toString()] = 1;
-               console.log(myCard);
+              
+               return myCard;
              }
            }
          }
