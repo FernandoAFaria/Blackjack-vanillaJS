@@ -114,27 +114,51 @@ body{
 }
 .controls{
   position: fixed;
-  right: 5%;
+  right: 2%;
 
 }
 .controls button{
   display: block;
   padding: 9px 33px;
-  background: coral;
+  background: red;
   color: white;
   font-size: 2rem;
   width: 175px;
   margin: 45px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+
+}
+.reset_btn{
+  position: fixed;
+  bottom: 5%;
+  right: 2%;
+  z-index: 2;
 }
 .dealer-total {
   position: fixed;
   left: 5%;
   top: 5%;
   font-size: 3rem;
+  color: white;
 }
 .player-total {
   position: fixed;
   left: 5%;
   bottom: 5%;
   font-size: 3rem;
+  color: white;
+}
+.game_status{
+  display: none;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(55, 55, 55, .98);
+  width: 100vw;
+  height: 350px;
+  color: white;
+  line-height: 350px;
+  font-size: 8vw;
+  text-align: center;
 }
