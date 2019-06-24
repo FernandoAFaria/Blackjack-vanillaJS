@@ -359,7 +359,6 @@ export class Dealer {
     //Incase an Ace is delt
     this.userAlternateTotal = 0;
     this.showPlayerTotals.aceCount = 0;
-    
   }
   showPlayerTotals() {
     let playerTotal = 0;
@@ -389,14 +388,18 @@ export class Dealer {
   showDealerTotals() {
     let dealerTotal = 0;
     let dealerAlternate = 0;
-
+    this.aceCount = 0;
     for (let i = 0; i < this.dealerCards.length; i++) {
       if (this.dealerCards[i].value != 11) {
         dealerTotal += this.dealerCards[i].value;
         dealerAlternate += this.dealerCards[i].value;
-      } else {
+      } else if (this.aceCount === 0) {
         dealerTotal += 1;
         dealerAlternate += 11;
+        this.aceCount++;
+      } else {
+        dealerTotal += 1;
+        dealerAlternate += 1;
       }
     }
     if (dealerAlternate > dealerTotal && dealerAlternate < 22) {
@@ -407,47 +410,35 @@ export class Dealer {
   }
 
   dealCard(who) {
-      return new Promise(resolve => {
-        let randomCard;
-        let myCard
+    return new Promise(resolve => {
+      let randomCard;
+      let myCard;
 
-        if (who === "dealer") {
-           randomCard = cardMap[randomNumber()];
+      if (who === "dealer") {
+        randomCard = cardMap[randomNumber()];
 
-          while (this.deltCards.hasOwnProperty(randomCard)) {
-            randomCard = cardMap[randomNumber()]
-          } 
-          
-            myCard = cardValues[randomCard.toString()];
-            this.dealerCards.push(myCard);
-            this.deltCards[randomCard.toString()] = 1;
-            
-          
-
-        } else if (who === "player") {
+        //if the random card was already delt, this will keep getting randoms until it finds one that hasnt been delt
+        while (this.deltCards.hasOwnProperty(randomCard)) {
           randomCard = cardMap[randomNumber()];
+        }
 
-          while (this.deltCards.hasOwnProperty(randomCard)) {
-            randomCard = cardMap[randomNumber()]
-          } 
+        myCard = cardValues[randomCard.toString()];
+        this.dealerCards.push(myCard);
+        this.deltCards[randomCard.toString()] = 1;
+      } else if (who === "player") {
+        randomCard = cardMap[randomNumber()];
 
-            myCard = cardValues[randomCard.toString()];
+        while (this.deltCards.hasOwnProperty(randomCard)) {
+          randomCard = cardMap[randomNumber()];
+        }
 
-            this.playerCards.push(myCard);
-            this.deltCards[randomCard.toString()] = 1;
-            
-            
-          }
-          console.log(myCard);
-          resolve(myCard);
+        myCard = cardValues[randomCard.toString()];
 
-        })
-
-
-
+        this.playerCards.push(myCard);
+        this.deltCards[randomCard.toString()] = 1;
       }
-    
-      
-   
-}
 
+      resolve(myCard);
+    });
+  }
+}

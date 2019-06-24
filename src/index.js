@@ -37,9 +37,6 @@ import { views } from "./views/cards";
      
       Views.displayCard(card, "player");
      
-  
-  
-
     //displays score
     Views.displayTotals(game.showDealerTotals(), game.showPlayerTotals());
     document.querySelector('.in-deck').textContent = 52 - game.showDeltCards();
@@ -62,29 +59,6 @@ import { views } from "./views/cards";
     }, 1500);
   }
 
-  //Check score once player takes a hit;
-  function checkScore() {
-   
-    setTimeout(() => {
-      if (game.showPlayerTotals() > 21) {
-        game_status.textContent = "You BUST!";
-        game_status.style.display = "block";
-      }
-    }, 1200);
-  }
-  //Check for blackjack during initial deal
-  function checkForBlackjack() {
-    setTimeout(() => {
-      if (game.showPlayerTotals() === 21) {
-        game_status.textContent = "BlackJack! You Win";
-        game_status.style.display = "block";
-      }
-      if (game.showDealerTotals() === 21) {
-        game_status.textContent = "Dealer Has Blackjack!";
-        game_status.style.display = "block";
-      }
-    }, 1500);
-  }
 
   //Check score once player takes a hit;
   function checkScore() {
@@ -145,4 +119,5 @@ import { views } from "./views/cards";
 
   //Reset Game
   reset_btn.addEventListener("click", resetGame);
+  
 })(Dealer, views);

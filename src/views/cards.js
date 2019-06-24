@@ -20,7 +20,7 @@ export const views = {
     let div = document.createElement("div");
     div.classList.add("flip-card");
 
-    //THis will slice the KING to just K to display on the card
+    //This will slice the KING to just K to display on the card
     if (card.card.length > 2) {
       myCard = card.card.toString().slice(0, 1);
     } else {
