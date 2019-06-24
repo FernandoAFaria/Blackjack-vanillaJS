@@ -348,7 +348,7 @@ export class Dealer {
   }
 
   reset() {
-    this.deltCards = {};
+    // this.deltCards = {};
     this.dealerCards = [];
     this.playerCards = [];
     this.dealerTotal = 0;
@@ -358,18 +358,25 @@ export class Dealer {
     this.userTotal = 0;
     //Incase an Ace is delt
     this.userAlternateTotal = 0;
+    this.showPlayerTotals.aceCount = 0;
+    
   }
   showPlayerTotals() {
     let playerTotal = 0;
     let playerAlternate = 0;
+    this.aceCount = 0;
 
     for (let i = 0; i < this.playerCards.length; i++) {
       if (this.playerCards[i].value != 11) {
         playerTotal += this.playerCards[i].value;
         playerAlternate += this.playerCards[i].value;
-      } else {
+      } else if (this.aceCount === 0) {
         playerTotal += 1;
         playerAlternate += 11;
+        this.aceCount++;
+      } else {
+        playerTotal += 1;
+        playerAlternate += 1;
       }
     }
     if (playerAlternate > playerTotal && playerAlternate < 22) {
@@ -400,33 +407,47 @@ export class Dealer {
   }
 
   dealCard(who) {
-    return new Promise(res => {
-      if (who === "dealer") {
-        let randomCard = cardMap[randomNumber()];
+      return new Promise(resolve => {
+        let randomCard;
+        let myCard
 
-        if (this.deltCards.hasOwnProperty(randomCard)) {
-          this.dealCard("dealer");
-        } else {
-          let myCard = cardValues[randomCard.toString()];
-          this.dealerCards.push(myCard);
-          this.deltCards[randomCard.toString()] = 1;
+        if (who === "dealer") {
+           randomCard = cardMap[randomNumber()];
 
-          res(myCard);
-        }
+          while (this.deltCards.hasOwnProperty(randomCard)) {
+            randomCard = cardMap[randomNumber()]
+          } 
+          
+            myCard = cardValues[randomCard.toString()];
+            this.dealerCards.push(myCard);
+            this.deltCards[randomCard.toString()] = 1;
+            
+          
+
+        } else if (who === "player") {
+          randomCard = cardMap[randomNumber()];
+
+          while (this.deltCards.hasOwnProperty(randomCard)) {
+            randomCard = cardMap[randomNumber()]
+          } 
+
+            myCard = cardValues[randomCard.toString()];
+
+            this.playerCards.push(myCard);
+            this.deltCards[randomCard.toString()] = 1;
+            
+            
+          }
+          console.log(myCard);
+          resolve(myCard);
+
+        })
+
+
+
       }
-      if (who === "player") {
-        let randomCard = cardMap[randomNumber()];
-        if (this.deltCards.hasOwnProperty(randomCard)) {
-          this.dealCard("player");
-        } else {
-          let myCard = cardValues[randomCard.toString()];
-
-          this.playerCards.push(myCard);
-          this.deltCards[randomCard.toString()] = 1;
-
-          res(myCard);
-        }
-      }
-    });
-  }
+    
+      
+   
 }
+

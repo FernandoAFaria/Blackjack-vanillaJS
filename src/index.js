@@ -15,20 +15,38 @@ import { views } from "./views/cards";
 
   initialDeal();
 
+  
+
   //initially deals 4 cards;
   async function initialDeal() {
-    game.dealCard("dealer").then(card => Views.displayCard(card, "dealer"));
-    game.dealCard("player").then(card => Views.displayCard(card, "player"));
-    game.dealCard("dealer").then(card => Views.displayCard(card, "dealer"));
-    game.dealCard("player").then(card => Views.displayCard(card, "player"));
+      
+    
+      let card = await game.dealCard('dealer');
+      
+      Views.displayCard(card, "dealer");
+      
+      card = await game.dealCard("player");
+     
+      Views.displayCard(card, "player");
+      
+      card = await game.dealCard("dealer");
+     
+      Views.displayCard(card, "dealer");
+      
+      card = await game.dealCard("player");
+     
+      Views.displayCard(card, "player");
+     
+  
+  
 
     //displays score
     Views.displayTotals(game.showDealerTotals(), game.showPlayerTotals());
-
+    document.querySelector('.in-deck').textContent = 52 - game.showDeltCards();
     //Check for blackjack after dealing is done
-    setTimeout(() => {
+   
       checkForBlackjack();
-    }, 1600);
+    
   }
   //Check for blackjack during initial deal
   function checkForBlackjack() {
@@ -46,12 +64,13 @@ import { views } from "./views/cards";
 
   //Check score once player takes a hit;
   function checkScore() {
+   
     setTimeout(() => {
       if (game.showPlayerTotals() > 21) {
         game_status.textContent = "You BUST!";
         game_status.style.display = "block";
       }
-    }, 1500);
+    }, 1200);
   }
   //Check for blackjack during initial deal
   function checkForBlackjack() {
@@ -69,7 +88,10 @@ import { views } from "./views/cards";
 
   //Check score once player takes a hit;
   function checkScore() {
+    document.querySelector(".in-deck").textContent =
+      52 - game.showDeltCards();
     setTimeout(() => {
+       
       if (game.showPlayerTotals() > 21) {
         game_status.textContent = "You BUST!";
         game_status.style.display = "block";
@@ -82,6 +104,7 @@ import { views } from "./views/cards";
   function resetGame() {
     game.reset();
     Views.reset();
+
     game_status.style.display = "none";
     //Animation for clearing table
     let allCards = document.getElementsByClassName("flip-card");
@@ -110,7 +133,9 @@ import { views } from "./views/cards";
 
   //Hit Btn
   hit_btn.addEventListener("click", async () => {
+    
     let player_card = await game.dealCard("player");
+    
     views.displayCard(player_card, "player");
 
     Views.displayTotals(game.showDealerTotals(), game.showPlayerTotals());

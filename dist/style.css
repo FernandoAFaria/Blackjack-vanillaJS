@@ -126,7 +126,10 @@ body{
   width: 175px;
   margin: 45px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-
+  cursor: pointer;
+}
+.controls button:hover{
+  background: darkred;
 }
 .reset_btn{
   position: fixed;
@@ -161,4 +164,11 @@ body{
   line-height: 350px;
   font-size: 8vw;
   text-align: center;
+}
+.cards_left_in_deck{
+  position: fixed;
+  top: 5%;
+  right: 5%;
+  color: white;
+  font-size: 3rem;
 }

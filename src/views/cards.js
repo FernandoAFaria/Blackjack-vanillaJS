@@ -12,6 +12,7 @@ export const views = {
   },
 
   displayCard: function(card, player) {
+    
     let myCard = "";
     this.cardCount++;
     let markup = "";
@@ -81,5 +82,6 @@ export const views = {
   displayTotals: function(dealerScore, playerScore) {
     this.playerScore.textContent = playerScore;
     this.dealerScore.textContent = dealerScore;
+    
   }
 };
