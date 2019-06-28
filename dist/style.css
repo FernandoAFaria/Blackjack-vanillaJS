@@ -109,9 +109,9 @@ body{
 .hidden{
   transform: rotateY(180deg);
 }
-.flip-card:hover .hidden{
+/* .flip-card:hover .hidden{
   transform: rotateY(0);
-}
+} */
 .controls{
   position: fixed;
   right: 2%;
@@ -143,6 +143,10 @@ body{
   top: 5%;
   font-size: 3rem;
   color: white;
+}
+.dealer-score{
+  color: lightblue;
+  display: none;
 }
 .player-total {
   position: fixed;
