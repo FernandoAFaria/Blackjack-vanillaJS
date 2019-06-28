@@ -5,6 +5,15 @@ export const views = {
   dealerScore: document.querySelector(".dealer-score"),
   cardCount: 0,
   dealerCardCount: 0,
+  
+  /*
+  ****Dealer and Player scores
+  **
+  */
+
+  //Create some HTML div or span in index.html
+  //Create a method that will update the score
+  
 
   reset: function() {
     this.cardCount = 0;

@@ -1,28 +1,26 @@
-*{
+* {
   margin: 0;
   padding: 0;
   border: 0;
   box-sizing: border-box;
 }
-body{
+body {
   background: green;
   overflow: hidden;
 }
-.container{
+.container {
   display: flex;
   height: 100vh;
   justify-content: space-evenly;
   align-items: center;
   flex-direction: column;
-
 }
-.table{
+.table {
   display: flex;
   width: 80vw;
   flex-direction: column;
   justify-content: center;
   align-content: center;
-  
 }
 .flip-card {
   background-color: transparent;
@@ -31,7 +29,7 @@ body{
   perspective: 600px;
   margin: 20px;
   transform: translate(105vw, -500px);
-  transition: all .3s;
+  transition: all 0.3s;
 }
 
 .flip-card-inner {
@@ -43,7 +41,6 @@ body{
   transition: transform 0.6s;
   transform-style: preserve-3d;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-
 }
 
 /* .flip-card:hover .flip-card-inner {
@@ -74,13 +71,13 @@ body{
   font-size: 4rem;
   /* transform: rotateY(180deg); */
 }
-.suit{
+.suit {
   width: 75px;
 }
-.top-left{
+.top-left {
   position: absolute;
   top: 15px;
-  left: 15px; 
+  left: 15px;
 }
 .top-right {
   position: absolute;
@@ -98,26 +95,25 @@ body{
   bottom: 15px;
   left: 15px;
 }
-.dealer, .player{
+.dealer,
+.player {
   position: relative;
   display: flex;
   flex-direction: row;
   justify-content: center;
   margin: 25px;
- 
 }
-.hidden{
+.hidden {
   transform: rotateY(180deg);
 }
 /* .flip-card:hover .hidden{
   transform: rotateY(0);
 } */
-.controls{
+.controls {
   position: fixed;
   right: 2%;
-
 }
-.controls button{
+.controls button {
   display: block;
   padding: 9px 33px;
   background: red;
@@ -128,10 +124,10 @@ body{
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   cursor: pointer;
 }
-.controls button:hover{
+.controls button:hover {
   background: darkred;
 }
-.reset_btn{
+.reset_btn {
   position: fixed;
   bottom: 5%;
   right: 2%;
@@ -144,7 +140,7 @@ body{
   font-size: 3rem;
   color: white;
 }
-.dealer-score{
+.dealer-score {
   color: lightblue;
   display: none;
 }
@@ -155,13 +151,13 @@ body{
   font-size: 3rem;
   color: white;
 }
-.game_status{
+.game_status {
   display: none;
   position: fixed;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  background: rgba(55, 55, 55, .98);
+  background: rgba(55, 55, 55, 0.98);
   width: 100vw;
   height: 350px;
   color: white;
@@ -169,7 +165,7 @@ body{
   font-size: 8vw;
   text-align: center;
 }
-.cards_left_in_deck{
+.cards_left_in_deck {
   position: fixed;
   top: 5%;
   right: 5%;
