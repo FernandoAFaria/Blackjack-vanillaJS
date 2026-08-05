@@ -1,444 +1,136 @@
-function randomNumber() {
-  return Math.floor(Math.random() * 52);
+const SUITS = ["clubs", "diamonds", "hearts", "spades"];
+const RANKS = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+
+function createDeck(random = Math.random) {
+  const deck = [];
+  SUITS.forEach(suit => RANKS.forEach(rank => deck.push({ suit, rank })));
+  for (let index = deck.length - 1; index > 0; index -= 1) {
+    const swap = Math.floor(random() * (index + 1));
+    [deck[index], deck[swap]] = [deck[swap], deck[index]];
+  }
+  return deck;
 }
-//Create an array with all cards
-//e.g. array[0]should be equal to "ClubsAce"
 
-let cardMap = [
-  "ClubsAce",
-  "Clubs2",
-  "Clubs3",
-  "Clubs4",
-  "Clubs5",
-  "Clubs6",
-  "Clubs7",
-  "Clubs8",
-  "Clubs9",
-  "Clubs10",
-  "ClubsJack",
-  "ClubsQueen",
-  "ClubsKing",
-  "DiamondsAce",
-  "Diamonds2",
-  "Diamonds3",
-  "Diamonds4",
-  "Diamonds5",
-  "Diamonds6",
-  "Diamonds7",
-  "Diamonds8",
-  "Diamonds9",
-  "Diamonds10",
-  "DiamondsJack",
-  "DiamondsQueen",
-  "DiamondsKing",
-  "HeartsAce",
-  "Hearts2",
-  "Hearts3",
-  "Hearts4",
-  "Hearts5",
-  "Hearts6",
-  "Hearts7",
-  "Hearts8",
-  "Hearts9",
-  "Hearts10",
-  "HeartsJack",
-  "HeartsQueen",
-  "HeartsKing",
-  "SpadesAce",
-  "Spades2",
-  "Spades3",
-  "Spades4",
-  "Spades5",
-  "Spades6",
-  "Spades7",
-  "Spades8",
-  "Spades9",
-  "Spades10",
-  "SpadesJack",
-  "SpadesQueen",
-  "SpadesKing"
-];
-
-//Card value holds suit, card, and value of each card
-
-let cardValues = {
-  ClubsAce: {
-    suit: "Clubs",
-    value: 11,
-    card: "Ace"
-  },
-  Clubs2: {
-    suit: "Clubs",
-    value: 2,
-    card: "2"
-  },
-  Clubs3: {
-    suit: "Clubs",
-    value: 3,
-    card: "3"
-  },
-  Clubs4: {
-    suit: "Clubs",
-    value: 4,
-    card: "4"
-  },
-  Clubs5: {
-    suit: "Clubs",
-    value: 5,
-    card: "5"
-  },
-  Clubs6: {
-    suit: "Clubs",
-    value: 6,
-    card: "6"
-  },
-  Clubs7: {
-    suit: "Clubs",
-    value: 7,
-    card: "7"
-  },
-  Clubs8: {
-    suit: "Clubs",
-    value: 8,
-    card: "8"
-  },
-  Clubs9: {
-    suit: "Clubs",
-    value: 9,
-    card: "9"
-  },
-  Clubs10: {
-    suit: "Clubs",
-    value: 10,
-    card: "10"
-  },
-  ClubsJack: {
-    suit: "Clubs",
-    value: 10,
-    card: "Jack"
-  },
-  ClubsQueen: {
-    suit: "Clubs",
-    value: 10,
-    card: "Queen"
-  },
-  ClubsKing: {
-    suit: "Clubs",
-    value: 10,
-    card: "King"
-  },
-  //Diamonds
-  DiamondsAce: {
-    suit: "Diamonds",
-    value: 11,
-    card: "Ace"
-  },
-  Diamonds2: {
-    suit: "Diamonds",
-    value: 2,
-    card: "2"
-  },
-  Diamonds3: {
-    suit: "Diamonds",
-    value: 3,
-    card: "3"
-  },
-  Diamonds4: {
-    suit: "Diamonds",
-    value: 4,
-    card: "4"
-  },
-  Diamonds5: {
-    suit: "Diamonds",
-    value: 5,
-    card: "5"
-  },
-  Diamonds6: {
-    suit: "Diamonds",
-    value: 6,
-    card: "6"
-  },
-  Diamonds7: {
-    suit: "Diamonds",
-    value: 7,
-    card: "7"
-  },
-  Diamonds8: {
-    suit: "Diamonds",
-    value: 8,
-    card: "8"
-  },
-  Diamonds9: {
-    suit: "Diamonds",
-    value: 9,
-    card: "9"
-  },
-  Diamonds10: {
-    suit: "Diamonds",
-    value: 10,
-    card: "10"
-  },
-  DiamondsJack: {
-    suit: "Diamonds",
-    value: 10,
-    card: "Jack"
-  },
-  DiamondsQueen: {
-    suit: "Diamonds",
-    value: 10,
-    card: "Queen"
-  },
-  DiamondsKing: {
-    suit: "Diamonds",
-    value: 10,
-    card: "King"
-  },
-  //Hearts
-  HeartsAce: {
-    suit: "Hearts",
-    value: 11,
-    card: "Ace"
-  },
-  Hearts2: {
-    suit: "Hearts",
-    value: 2,
-    card: "2"
-  },
-  Hearts3: {
-    suit: "Hearts",
-    value: 3,
-    card: "3"
-  },
-  Hearts4: {
-    suit: "Hearts",
-    value: 4,
-    card: "4"
-  },
-  Hearts5: {
-    suit: "Hearts",
-    value: 5,
-    card: "5"
-  },
-  Hearts6: {
-    suit: "Hearts",
-    value: 6,
-    card: "6"
-  },
-  Hearts7: {
-    suit: "Hearts",
-    value: 7,
-    card: "7"
-  },
-  Hearts8: {
-    suit: "Hearts",
-    value: 8,
-    card: "8"
-  },
-  Hearts9: {
-    suit: "Hearts",
-    value: 9,
-    card: "9"
-  },
-  Hearts10: {
-    suit: "Hearts",
-    value: 10,
-    card: "10"
-  },
-  HeartsJack: {
-    suit: "Hearts",
-    value: 10,
-    card: "Jack"
-  },
-  HeartsQueen: {
-    suit: "Hearts",
-    value: 10,
-    card: "Queen"
-  },
-  HeartsKing: {
-    suit: "Hearts",
-    value: 10,
-    card: "King"
-  },
-  //Spades
-  SpadesAce: {
-    suit: "Spades",
-    value: 11,
-    card: "Ace"
-  },
-  Spades2: {
-    suit: "Spades",
-    value: 2,
-    card: "2"
-  },
-  Spades3: {
-    suit: "Spades",
-    value: 3,
-    card: "3"
-  },
-  Spades4: {
-    suit: "Spades",
-    value: 4,
-    card: "4"
-  },
-  Spades5: {
-    suit: "Spades",
-    value: 5,
-    card: "5"
-  },
-  Spades6: {
-    suit: "Spades",
-    value: 6,
-    card: "6"
-  },
-  Spades7: {
-    suit: "Spades",
-    value: 7,
-    card: "7"
-  },
-  Spades8: {
-    suit: "Spades",
-    value: 8,
-    card: "8"
-  },
-  Spades9: {
-    suit: "Spades",
-    value: 9,
-    card: "9"
-  },
-  Spades10: {
-    suit: "Spades",
-    value: 10,
-    card: "10"
-  },
-  SpadesJack: {
-    suit: "Spades",
-    value: 10,
-    card: "Jack"
-  },
-  SpadesQueen: {
-    suit: "Spades",
-    value: 10,
-    card: "Queen"
-  },
-  SpadesKing: {
-    suit: "Spades",
-    value: 10,
-    card: "King"
-  }
-};
-//Once a card is delt, it should be checked against deltCards,  If not found, it's good to go, otherwise select another card.
-
-export class Dealer {
-  constructor() {
-    this.deltCards = {};
-    this.dealerCards = [];
-    this.playerCards = [];
-    this.dealerTotal = 0;
-    //Incase an Ace is delt
-    this.dealerAlternateTotal = 0;
-
-    this.userTotal = 0;
-    //Incase an Ace is delt
-    this.userAlternateTotal = 0;
-  }
-
-  showDeltCards() {
-    let keys = Object.keys(this.deltCards);
-    return keys.length;
-  }
-
-  reset() {
-    // this.deltCards = {};
-    this.dealerCards = [];
-    this.playerCards = [];
-    this.dealerTotal = 0;
-    //Incase an Ace is delt
-    this.dealerAlternateTotal = 0;
-
-    this.userTotal = 0;
-    //Incase an Ace is delt
-    this.userAlternateTotal = 0;
-    this.showPlayerTotals.aceCount = 0;
-  }
-  showPlayerTotals() {
-    let playerTotal = 0;
-    let playerAlternate = 0;
-    this.aceCount = 0;
-
-    for (let i = 0; i < this.playerCards.length; i++) {
-      if (this.playerCards[i].value != 11) {
-        playerTotal += this.playerCards[i].value;
-        playerAlternate += this.playerCards[i].value;
-      } else if (this.aceCount === 0) {
-        playerTotal += 1;
-        playerAlternate += 11;
-        this.aceCount++;
-      } else {
-        playerTotal += 1;
-        playerAlternate += 1;
-      }
-    }
-    if (playerAlternate > playerTotal && playerAlternate < 22) {
-      return playerAlternate;
+function scoreHand(hand) {
+  let total = 0;
+  let aces = 0;
+  hand.forEach(card => {
+    if (card.rank === "A") {
+      total += 11;
+      aces += 1;
     } else {
-      return playerTotal;
+      total += ["J", "Q", "K"].includes(card.rank) ? 10 : Number(card.rank);
     }
+  });
+  while (total > 21 && aces > 0) {
+    total -= 10;
+    aces -= 1;
+  }
+  return { total, soft: aces > 0, blackjack: hand.length === 2 && total === 21, bust: total > 21 };
+}
+
+class BlackjackGame {
+  constructor({ bankroll = 500, random = Math.random } = {}) {
+    this.bankroll = bankroll;
+    this.random = random;
+    this.bet = 0;
+    this.phase = "betting";
+    this.message = "Choose a wager to begin.";
+    this.player = [];
+    this.dealer = [];
+    this.deck = [];
   }
 
-  showDealerTotals() {
-    let dealerTotal = 0;
-    let dealerAlternate = 0;
-    this.aceCount = 0;
-    for (let i = 0; i < this.dealerCards.length; i++) {
-      if (this.dealerCards[i].value != 11) {
-        dealerTotal += this.dealerCards[i].value;
-        dealerAlternate += this.dealerCards[i].value;
-      } else if (this.aceCount === 0) {
-        dealerTotal += 1;
-        dealerAlternate += 11;
-        this.aceCount++;
-      } else {
-        dealerTotal += 1;
-        dealerAlternate += 1;
-      }
-    }
-    if (dealerAlternate > dealerTotal && dealerAlternate < 22) {
-      return dealerAlternate;
-    } else {
-      return dealerTotal;
-    }
+  setBet(amount) {
+    if (this.phase !== "betting") return false;
+    const value = Number(amount);
+    if (!Number.isInteger(value) || value < 5 || value > this.bankroll) return false;
+    this.bet = value;
+    this.message = `Wager set to $${value}. Deal when ready.`;
+    return true;
   }
 
-  dealCard(who) {
-    return new Promise(resolve => {
-      let randomCard;
-      let myCard;
+  deal() {
+    if (this.phase !== "betting" || this.bet < 5 || this.bet > this.bankroll) return false;
+    this.deck = createDeck(this.random);
+    this.bankroll -= this.bet;
+    this.player = [this.draw(), this.draw()];
+    this.dealer = [this.draw(), this.draw()];
+    this.phase = "playing";
+    this.message = "Your turn. Hit, stand, or double down.";
+    const playerScore = scoreHand(this.player);
+    const dealerScore = scoreHand(this.dealer);
+    if (playerScore.blackjack || dealerScore.blackjack) this.settleNaturals(playerScore, dealerScore);
+    return true;
+  }
 
-      if (who === "dealer") {
-        randomCard = cardMap[randomNumber()];
+  draw() { return this.deck.pop(); }
 
-        //if the random card was already delt, this will keep getting randoms until it finds one that hasnt been delt
-        while (this.deltCards.hasOwnProperty(randomCard)) {
-          randomCard = cardMap[randomNumber()];
-        }
+  canDouble() {
+    return this.phase === "playing" && this.player.length === 2 && this.bankroll >= this.bet;
+  }
 
-        myCard = cardValues[randomCard.toString()];
-        this.dealerCards.push(myCard);
-        this.deltCards[randomCard.toString()] = 1;
-      } else if (who === "player") {
-        randomCard = cardMap[randomNumber()];
+  hit() {
+    if (this.phase !== "playing") return false;
+    this.player.push(this.draw());
+    const score = scoreHand(this.player);
+    if (score.bust) this.finish("lose", "Bust — dealer wins.");
+    else if (score.total === 21) this.stand();
+    else this.message = `You have ${score.total}. Choose hit or stand.`;
+    return true;
+  }
 
-        while (this.deltCards.hasOwnProperty(randomCard)) {
-          randomCard = cardMap[randomNumber()];
-        }
+  double() {
+    if (!this.canDouble()) return false;
+    this.bankroll -= this.bet;
+    this.bet *= 2;
+    this.player.push(this.draw());
+    const score = scoreHand(this.player);
+    if (score.bust) this.finish("lose", "Double down bust — dealer wins.");
+    else this.playDealer();
+    return true;
+  }
 
-        myCard = cardValues[randomCard.toString()];
+  stand() {
+    if (this.phase !== "playing") return false;
+    this.playDealer();
+    return true;
+  }
 
-        this.playerCards.push(myCard);
-        this.deltCards[randomCard.toString()] = 1;
-      }
+  playDealer() {
+    this.phase = "dealer";
+    while (scoreHand(this.dealer).total < 17) this.dealer.push(this.draw());
+    const player = scoreHand(this.player);
+    const dealer = scoreHand(this.dealer);
+    if (dealer.bust) this.finish("win", "Dealer busts — you win!");
+    else if (player.total > dealer.total) this.finish("win", `You win ${player.total} to ${dealer.total}!`);
+    else if (player.total < dealer.total) this.finish("lose", `Dealer wins ${dealer.total} to ${player.total}.`);
+    else this.finish("push", `Push at ${player.total}. Your wager is returned.`);
+  }
 
-      resolve(myCard);
-    });
+  settleNaturals(player, dealer) {
+    if (player.blackjack && dealer.blackjack) this.finish("push", "Both have blackjack — push.");
+    else if (player.blackjack) this.finish("blackjack", "Blackjack! You win 3 to 2.");
+    else this.finish("lose", "Dealer has blackjack.");
+  }
+
+  finish(outcome, message) {
+    if (outcome === "win") this.bankroll += this.bet * 2;
+    if (outcome === "blackjack") this.bankroll += this.bet * 2.5;
+    if (outcome === "push") this.bankroll += this.bet;
+    this.phase = "finished";
+    this.message = message;
+  }
+
+  nextRound() {
+    if (this.phase !== "finished") return false;
+    this.player = [];
+    this.dealer = [];
+    this.bet = Math.min(this.bet, this.bankroll);
+    this.phase = "betting";
+    this.message = this.bankroll >= 5 ? "Choose a wager for the next hand." : "Session complete. Refresh to start a new practice bankroll.";
+    return true;
   }
 }
+
+module.exports = { BlackjackGame, createDeck, scoreHand };

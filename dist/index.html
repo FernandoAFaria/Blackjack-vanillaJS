@@ -1,32 +1,27 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <link rel="stylesheet" href="style.css" />
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Babel/Webpack</title>
-  </head>
-  <body>
-    <div class="container">
-      <div class="table">
-        <div class="dealer"></div>
-
-        <div class="player"></div>
-      </div>
-      <div class="controls">
-        <button class="stay_btn">Stay</button>
-        <button class="hit_btn">Hit</button>
-        <button  class="reset_btn">Deal</button>
-      </div>
-
-      <div class="dealer-total">Dealer: <span class="dealer-score"></span></div>
-      <div class="player-total">Player: <span class="player-score"></span></div>
-      <div class="cards_left_in_deck">
-        Cards left in deck: <span class="in-deck"></span>
-      </div>
-    </div>
-    <div class="game_status"></div>
-    <script src="bundle.js"></script>
-  </body>
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="A private, just-for-fun game of single-player blackjack.">
+  <link rel="stylesheet" href="style.css"><title>Twenty One — Blackjack</title>
+</head>
+<body>
+  <header class="masthead"><a class="brand" href="#table">Twenty One</a><p>Practice table · No real money</p></header>
+  <main id="table" class="layout">
+    <section class="table" aria-labelledby="table-title">
+      <div class="table__edge"><h1 id="table-title">Blackjack</h1><p>Dealer stands on all 17s · Blackjack pays 3:2</p></div>
+      <section class="hand" aria-labelledby="dealer-title"><div class="hand__heading"><h2 id="dealer-title">Dealer</h2><output id="dealer-score" class="score" aria-label="Dealer score">—</output></div><ul id="dealer-cards" class="cards" aria-label="Dealer hand"></ul></section>
+      <div class="table__mark" aria-hidden="true"><span>BLACKJACK</span><small>PAYS 3 TO 2</small></div>
+      <section class="hand" aria-labelledby="player-title"><div class="hand__heading"><h2 id="player-title">Your hand</h2><output id="player-score" class="score" aria-label="Your score">—</output></div><ul id="player-cards" class="cards" aria-label="Your hand"></ul></section>
+    </section>
+    <aside class="panel" aria-label="Game controls">
+      <div class="ledger"><div><span>Bankroll</span><strong id="bankroll">$500</strong></div><div><span>Wager</span><strong id="bet">$25</strong></div></div>
+      <p id="game-status" class="status" role="status" aria-live="polite" aria-atomic="true">Choose a wager to begin.</p>
+      <div class="wager"><label for="bet-input">Wager amount</label><div><span aria-hidden="true">$</span><input id="bet-input" type="number" min="5" max="500" step="5" value="25" inputmode="numeric"></div></div>
+      <div class="actions"><button id="deal" class="primary">Deal cards</button><button id="hit" disabled>Hit <kbd>H</kbd></button><button id="stand" disabled>Stand <kbd>S</kbd></button><button id="double" disabled>Double <kbd>D</kbd></button><button id="next-round" class="primary" hidden>Next round <kbd>N</kbd></button></div>
+      <p class="hint">Keyboard: H to hit, S to stand, D to double. Your practice bankroll has no cash value.</p>
+    </aside>
+  </main>
+  <script src="bundle.js"></script>
+</body>
 </html>

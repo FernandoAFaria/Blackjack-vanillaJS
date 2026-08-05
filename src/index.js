@@ -1,193 +1,89 @@
-import { Dealer } from "./model/dealer.model";
-import { views } from "./views/cards";
+const { BlackjackGame, scoreHand } = require("./model/dealer.model");
 
+const game = new BlackjackGame();
+const elements = {
+  bankroll: document.querySelector("#bankroll"), bet: document.querySelector("#bet"), betInput: document.querySelector("#bet-input"),
+  dealerCards: document.querySelector("#dealer-cards"), playerCards: document.querySelector("#player-cards"),
+  dealerScore: document.querySelector("#dealer-score"), playerScore: document.querySelector("#player-score"),
+  status: document.querySelector("#game-status"), deal: document.querySelector("#deal"), hit: document.querySelector("#hit"),
+  stand: document.querySelector("#stand"), double: document.querySelector("#double"), next: document.querySelector("#next-round")
+};
+const symbols = { clubs: "♣", diamonds: "♦", hearts: "♥", spades: "♠" };
+let lastMessage = "";
 
-(function(Dealer, Views) {
+function money(value) { return `$${Number(value).toFixed(value % 1 ? 2 : 0)}`; }
 
-  //Control btns
-  let stay_btn = document.querySelector(".stay_btn");
-  let hit_btn = document.querySelector(".hit_btn");
-  let reset_btn = document.querySelector(".reset_btn");
-  let dealer_table = document.querySelector(".dealer");
-  let player_table = document.querySelector(".player");
+function setCardFace(item, card, hidden) {
+  item.className = `card ${hidden ? "card--back" : `card--${card.suit}`}`;
+  item.setAttribute("aria-label", hidden ? "Dealer hole card, face down" : `${card.rank} of ${card.suit}`);
+  item.innerHTML = hidden ? '<span aria-hidden="true">21</span>' : `<span class="card__rank">${card.rank}</span><span class="card__suit" aria-hidden="true">${symbols[card.suit]}</span>`;
+}
 
-  let game_status = document.querySelector(".game_status");
-
-  let game = new Dealer();
-
-  initialDeal();
-
-
-  /*
-  ****************************************************
-  ****Create an object for keeping track of the score
-    the function should keep track of both scores and have a method that returns
-    both scores.  You can then pass this method into the views to display the score
-    if someone wins 
-  *****************************************************
-  */
-
-  //initially deals 4 cards;
-  async function initialDeal() {
-    if (52 - game.showDeltCards() < 4) {
-      game_status.textContent = "Not Enough Cards, Refresh the browser";
-      game_status.style.display = "block";
-    } else {
-      let card = await game.dealCard("dealer");
-
-      Views.displayCard(card, "dealer");
-
-      card = await game.dealCard("player");
-
-      Views.displayCard(card, "player");
-
-      card = await game.dealCard("dealer");
-
-      Views.displayCard(card, "dealer");
-
-      card = await game.dealCard("player");
-
-      Views.displayCard(card, "player");
-
-      //displays score
-      Views.displayTotals(game.showDealerTotals(), game.showPlayerTotals());
-      document.querySelector(".in-deck").textContent =
-        52 - game.showDeltCards();
-      //Check for blackjack after dealing is done
-
-      checkForBlackjack();
+function renderCards(cards, target, hideHole) {
+  while (target.children.length > cards.length) target.lastElementChild.remove();
+  cards.forEach((card, index) => {
+    const hidden = hideHole && index === 1;
+    const identity = `${card.rank}-${card.suit}`;
+    let item = target.children[index];
+    if (!item || item.dataset.card !== identity) {
+      item = document.createElement("li");
+      item.dataset.card = identity;
+      item.style.setProperty("--deal-index", index);
+      setCardFace(item, card, hidden);
+      item.classList.add("card--dealt");
+      if (target.children[index]) target.replaceChild(item, target.children[index]);
+      else target.appendChild(item);
+      return;
     }
-  }
-  //Check for blackjack during initial deal
-  function checkForBlackjack() {
-    hit_btn.disabled = "disabled";
-    setTimeout(() => {
-      if (game.showPlayerTotals() === 21) {
-        game_status.textContent = "BlackJack! You Win";
-        game_status.style.display = "block";
-      }
-      if (game.showDealerTotals() === 21) {
-        game_status.textContent = "Dealer Has Blackjack!";
-        game_status.style.display = "block";
-      }
-      hit_btn.disabled = "";
-    }, 1500);
-  }
-
-  //Check score once player takes a hit;
-  function checkScore() {
-    hit_btn.disabled = "disabled";
-    document.querySelector(".in-deck").textContent = 52 - game.showDeltCards();
-    setTimeout(() => {
-      if (game.showPlayerTotals() > 21) {
-        game_status.textContent = "You BUST!";
-        game_status.style.display = "block";
-      }
-      hit_btn.disabled = "";
-    }, 1500);
-  }
-
-  //Reset Game
-
-  function resetGame() {
-    game.reset();
-    Views.reset();
-
-    try {
-      document.querySelector(".dealer-score").style.display = "none";
-      hit_btn.disabled = "";
-    } catch (err) {
-      console.log(err);
+    if (item.classList.contains("card--back") && !hidden) {
+      setCardFace(item, card, false);
+      item.classList.add("card--revealing");
     }
+  });
+}
 
-    game_status.style.display = "none";
-    //Animation for clearing table
-    let allCards = document.getElementsByClassName("flip-card");
-    for (let i = 0; i < allCards.length; i++) {
-      setTimeout(() => {
-        allCards[i].style.transform = "translate(-110vw, 75px)";
-      }, 200 * i);
-    }
+function renderStatus() {
+  if (lastMessage === game.message) return;
+  lastMessage = game.message;
+  elements.status.textContent = game.message;
+  elements.status.dataset.phase = game.phase;
+  elements.status.classList.remove("status--changed");
+  void elements.status.offsetWidth;
+  elements.status.classList.add("status--changed");
+}
 
-    //clear the HTML
-    setTimeout(() => {
-      Views.displayTotals(game.showDealerTotals(), game.showPlayerTotals());
-      dealer_table.innerHTML = "";
-      player_table.innerHTML = "";
-    }, 1200);
+function render() {
+  const playing = game.phase === "playing";
+  const betting = game.phase === "betting";
+  const finished = game.phase === "finished";
+  const hideHole = playing;
+  elements.bankroll.textContent = money(game.bankroll);
+  elements.bet.textContent = money(game.bet);
+  elements.betInput.max = game.bankroll;
+  elements.betInput.disabled = !betting || game.bankroll < 5;
+  elements.deal.disabled = !betting || game.bet < 5 || game.bet > game.bankroll;
+  elements.hit.disabled = !playing;
+  elements.stand.disabled = !playing;
+  elements.double.disabled = !game.canDouble();
+  elements.next.hidden = !finished;
+  renderStatus();
+  renderCards(game.dealer, elements.dealerCards, hideHole);
+  renderCards(game.player, elements.playerCards, false);
+  elements.playerScore.textContent = game.player.length ? scoreHand(game.player).total : "—";
+  elements.dealerScore.textContent = game.dealer.length ? (hideHole ? scoreHand([game.dealer[0]]).total : scoreHand(game.dealer).total) : "—";
+}
 
-    //deal cards
+elements.betInput.addEventListener("input", event => { game.setBet(Number(event.target.value)); render(); });
+elements.deal.addEventListener("click", () => { game.setBet(Number(elements.betInput.value)); game.deal(); render(); });
+elements.hit.addEventListener("click", () => { game.hit(); render(); });
+elements.stand.addEventListener("click", () => { game.stand(); render(); });
+elements.double.addEventListener("click", () => { game.double(); render(); });
+elements.next.addEventListener("click", () => { game.nextRound(); elements.betInput.value = game.bet || 25; game.setBet(Number(elements.betInput.value)); render(); elements.deal.focus(); });
+document.addEventListener("keydown", event => {
+  if (event.altKey || event.ctrlKey || event.metaKey || event.target === elements.betInput) return;
+  const action = { h: elements.hit, s: elements.stand, d: elements.double, n: elements.next }[event.key.toLowerCase()];
+  if (action && !action.disabled && !action.hidden) { event.preventDefault(); action.click(); }
+});
 
-    setTimeout(() => {
-      initialDeal();
-      checkScore();
-    }, 1500);
-  }
-
-  function dealerHit() {
-    let dealerTotal = game.showDealerTotals();
-    let playerTotal = game.showPlayerTotals();
-
-    if (dealerTotal <= 15) {
-      setTimeout(async () => {
-        let card = await game.dealCard("dealer");
-        Views.displayCard(card, "dealer");
-        dealerTotal = game.showDealerTotals();
-        Views.displayTotals(game.showDealerTotals(), game.showPlayerTotals());
-        setTimeout(() => {
-          dealerHit();
-        }, 1000);
-      }, 1000);
-    }
-    if (dealerTotal > 21) {
-      game_status.textContent = "Dealer Busts!";
-      game_status.style.display = "block";
-    }
-
-    if (dealerTotal > 15 && dealerTotal < 22) {
-      if (dealerTotal > playerTotal) {
-        //Dealer Wins
-        game_status.textContent = "Dealer Wins!";
-        game_status.style.display = "block";
-      }
-
-      //Tied Game
-      if (dealerTotal === playerTotal) {
-        game_status.textContent = "Push!";
-        game_status.style.display = "block";
-      }
-
-      if (dealerTotal < playerTotal && playerTotal < 22) {
-        game_status.textContent = "Player Wins!";
-        game_status.style.display = "block";
-      }
-    }
-  }
-
-  //event listeners
-
-  //Hit Btn
-  hit_btn &&
-    hit_btn.addEventListener("click", async () => {
-      let player_card = await game.dealCard("player");
-
-      views.displayCard(player_card, "player");
-
-      Views.displayTotals(game.showDealerTotals(), game.showPlayerTotals());
-
-      checkScore();
-    });
-
-  //Stay Btn
-  stay_btn &&
-    stay_btn.addEventListener("click", () => {
-      hit_btn.disabled = "disabled";
-
-      document.querySelector(".hidden").classList.remove("hidden");
-      document.querySelector(".dealer-score").style.display = "inline";
-      dealerHit();
-    });
-
-  //Reset Game
-  reset_btn && reset_btn.addEventListener("click", resetGame);
-})(Dealer, views);
+game.setBet(Number(elements.betInput.value));
+render();
