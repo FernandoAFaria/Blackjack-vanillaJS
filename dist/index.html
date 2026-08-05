@@ -16,7 +16,7 @@
     </section>
     <aside class="panel" aria-label="Game controls">
       <div class="ledger"><div><span>Bankroll</span><strong id="bankroll">$500</strong></div><div><span>Wager</span><strong id="bet">$25</strong></div></div>
-      <p id="game-status" class="status" role="status" aria-live="polite">Choose a wager to begin.</p>
+      <p id="game-status" class="status" role="status" aria-live="polite" aria-atomic="true">Choose a wager to begin.</p>
       <div class="wager"><label for="bet-input">Wager amount</label><div><span aria-hidden="true">$</span><input id="bet-input" type="number" min="5" max="500" step="5" value="25" inputmode="numeric"></div></div>
       <div class="actions"><button id="deal" class="primary">Deal cards</button><button id="hit" disabled>Hit <kbd>H</kbd></button><button id="stand" disabled>Stand <kbd>S</kbd></button><button id="double" disabled>Double <kbd>D</kbd></button><button id="next-round" class="primary" hidden>Next round <kbd>N</kbd></button></div>
       <p class="hint">Keyboard: H to hit, S to stand, D to double. Your practice bankroll has no cash value.</p>

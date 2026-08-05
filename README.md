@@ -8,6 +8,8 @@ Set a practice wager of at least $5, then deal. Use **Hit** to take a card, **St
 
 Keyboard controls are `H` for hit, `S` for stand, `D` for double, and `N` for the next round. All controls are standard focusable buttons and game messages are announced by screen readers.
 
+New cards, the dealer's hole-card reveal, and game-status changes use short visual transitions without delaying game actions. The interface honors `prefers-reduced-motion` by removing nonessential motion while keeping every state change immediately visible and announced.
+
 ## Local development
 
 Requires Node.js and npm. Dependencies are already represented by `package-lock.json`.

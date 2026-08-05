@@ -148,19 +148,47 @@ const elements = {
   stand: document.querySelector("#stand"), double: document.querySelector("#double"), next: document.querySelector("#next-round")
 };
 const symbols = { clubs: "♣", diamonds: "♦", hearts: "♥", spades: "♠" };
+let lastMessage = "";
 
 function money(value) { return `$${Number(value).toFixed(value % 1 ? 2 : 0)}`; }
 
+function setCardFace(item, card, hidden) {
+  item.className = `card ${hidden ? "card--back" : `card--${card.suit}`}`;
+  item.setAttribute("aria-label", hidden ? "Dealer hole card, face down" : `${card.rank} of ${card.suit}`);
+  item.innerHTML = hidden ? '<span aria-hidden="true">21</span>' : `<span class="card__rank">${card.rank}</span><span class="card__suit" aria-hidden="true">${symbols[card.suit]}</span>`;
+}
+
 function renderCards(cards, target, hideHole) {
-  target.innerHTML = "";
+  while (target.children.length > cards.length) target.lastElementChild.remove();
   cards.forEach((card, index) => {
     const hidden = hideHole && index === 1;
-    const item = document.createElement("li");
-    item.className = `card ${hidden ? "card--back" : `card--${card.suit}`}`;
-    item.setAttribute("aria-label", hidden ? "Dealer hole card, face down" : `${card.rank} of ${card.suit}`);
-    item.innerHTML = hidden ? '<span aria-hidden="true">21</span>' : `<span class="card__rank">${card.rank}</span><span class="card__suit" aria-hidden="true">${symbols[card.suit]}</span>`;
-    target.appendChild(item);
+    const identity = `${card.rank}-${card.suit}`;
+    let item = target.children[index];
+    if (!item || item.dataset.card !== identity) {
+      item = document.createElement("li");
+      item.dataset.card = identity;
+      item.style.setProperty("--deal-index", index);
+      setCardFace(item, card, hidden);
+      item.classList.add("card--dealt");
+      if (target.children[index]) target.replaceChild(item, target.children[index]);
+      else target.appendChild(item);
+      return;
+    }
+    if (item.classList.contains("card--back") && !hidden) {
+      setCardFace(item, card, false);
+      item.classList.add("card--revealing");
+    }
   });
+}
+
+function renderStatus() {
+  if (lastMessage === game.message) return;
+  lastMessage = game.message;
+  elements.status.textContent = game.message;
+  elements.status.dataset.phase = game.phase;
+  elements.status.classList.remove("status--changed");
+  void elements.status.offsetWidth;
+  elements.status.classList.add("status--changed");
 }
 
 function render() {
@@ -177,7 +205,7 @@ function render() {
   elements.stand.disabled = !playing;
   elements.double.disabled = !game.canDouble();
   elements.next.hidden = !finished;
-  elements.status.textContent = game.message;
+  renderStatus();
   renderCards(game.dealer, elements.dealerCards, hideHole);
   renderCards(game.player, elements.playerCards, false);
   elements.playerScore.textContent = game.player.length ? scoreHand(game.player).total : "—";
