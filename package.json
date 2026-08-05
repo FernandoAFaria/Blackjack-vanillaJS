@@ -1,20 +1,14 @@
 {
-  "name": "Tutorials",
+  "name": "blackjack-vanilla-js",
   "version": "1.0.0",
-  "description": "",
+  "description": "Accessible static single-player blackjack game",
   "main": "app.js",
   "scripts": {
-    "dev": "webpack --watch"
+    "dev": "node scripts/build.js --watch",
+    "build": "node scripts/build.js",
+    "test": "node test/game.test.js"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@babel/core": "^7.4.5",
-    "@babel/polyfill": "^7.4.4",
-    "@babel/preset-env": "^7.4.5",
-    "babel-loader": "^8.0.6",
-    "webpack": "^4.35.0",
-    "webpack-cli": "^3.3.5"
-  }
+  "license": "ISC"
 }
